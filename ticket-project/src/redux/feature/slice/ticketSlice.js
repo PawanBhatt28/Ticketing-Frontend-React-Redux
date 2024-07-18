@@ -1,4 +1,5 @@
 import { createSlice, current } from "@reduxjs/toolkit";
+import { act } from "react";
 
 const initialState = {
   allTickets: [],
@@ -76,10 +77,27 @@ export const ticketsSlice = createSlice({
       state.allTickets = action.payload;
       state.filteredTickets = action.payload;
     },
+    searchTicket: (state, action) => {
+      const searchText = action.payload;
+      console.log(searchText);
+      state.filteredTickets = state.filteredTickets.filter((ticket) => {
+        ticket.channel.toLowerCase().includes(searchText) ||
+          ticket.description.toLowerCase().includes(searchText) ||
+          ticket.status.toLowerCase().includes(searchText) ||
+          ticket.assignedTo.toLowerCase().includes(searchText) ||
+          ticket.createdBy.toLowerCase().includes(searchText) ||
+          ticket.progress.toLowerCase().includes(searchText);
+      });
+    },
   },
 });
 
-export const { fetchTickets, setTickets, createTicket, deleteTicket } =
-  ticketsSlice.actions;
+export const {
+  fetchTickets,
+  setTickets,
+  createTicket,
+  deleteTicket,
+  searchTicket,
+} = ticketsSlice.actions;
 
 export default ticketsSlice.reducer;
